@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+		<style>
+		h3, h4 {text-align: center;}
+		span {font-weight: bold;}
+		</style>
+
+		<script type=text/javascript>
+			$(function() 
+			{
+			// When the onAir button is pressed (change)
+			// do an ajax request to server to change onAir state			
+				$('#flip-onAir').change(function() 
+				{
+				$.getJSON('/_onAir', {state: $('#flip-onAir').val()});
+				});
+
+			// When the radio buttons are pressed (clicked)
+			// do an ajax request to server to send new indicator state			
+				$('#radio-choice-1').click(function() 
+				{
+				$.getJSON('/_ind', {state: $('#radio-choice-1').val()});
+				});
+
+				$('#radio-choice-2').click(function() 
+				{
+				$.getJSON('/_ind', {state: $('#radio-choice-2').val()});
+				});
+
+				$('#radio-choice-3').click(function() 
+				{
+				$.getJSON('/_ind', {state: $('#radio-choice-3').val()});
+				});
+
+				$('#radio-choice-4').click(function() 
+				{
+				$.getJSON('/_ind', {state: $('#radio-choice-4').val()});
+				});
+			});
+
+			$(function button() 
+			{			
+			// periodically (500ms) do an ajax request to get the button state
+			// modify the span tag to reflect the state (pressed or not)
+			// the state text comes from the JSON string returned by the server
+				$.getJSON('/_onAirState', function(data) 
+				{
+				// Update button state; and refresh the jQuery mobile slider widget
+				$('#flip-onAir').val(data.onAirState);
+				$('#flip-onAir').slider('refresh');
+
+				//$.getJSON('/_indState', function(data) 
+
+				
+				setTimeout(function(){button();},500);
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<!-- Simple JQuery Mobile page that display the On Air state -->
+		<!-- You can also change the On Air state with the slider switch -->
+		<!-- The Raspberry Pi uptime is displayed in the footer (Jinja2 expands the template tag) -->
+
+		<div data-role="page" data-theme="b">
+		  <div data-role="header">
+			<div><h3>Conference Clock Control</h3></div>
+		  </div>
+
+		  <div data-role="content">
+			<form>
+			<select name="flip-onAir" id="flip-onAir" data-role="slider" style="float: left;">
+				<option value="off">OFF AIR</option>
+				<option value="on">ON AIR</option>
+			</select>
+			</form>
+
+			<form>
+			<fieldset data-role="controlgroup">
+				<legend>Speaker Indicators:</legend>
+     				<input type="radio" name="radio-choice" id="radio-choice-1" value="1" />
+     				<label for="radio-choice-1">"10 MINS"</label>
+
+     				<input type="radio" name="radio-choice" id="radio-choice-2" value="2"  />
+     				<label for="radio-choice-2">"5 MINS"</label>
+
+     				<input type="radio" name="radio-choice" id="radio-choice-3" value="3"  />
+     				<label for="radio-choice-3">"DONE"</label>
+
+     				<input type="radio" name="radio-choice" id="radio-choice-4" value="0" checked="checked" />
+     				<label for="radio-choice-4">None</label>
+			</fieldset>
+			</form>
+
+		  </div>
+		 <div data-role="footer">
+			<div><h4>Raspberry Pi {{uptime}}</h4></div>
+		  </div>
+		</div>
+	<body>
+</html>
