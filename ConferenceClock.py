@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify
-import thread as Thread
+from threading import Thread
 import pirsclockfull as clock
-#import test as clock
 
 app = Flask(__name__)
 
@@ -62,9 +61,9 @@ def GetUptime():
 
 def start_web_server():
     # run the webserver on standard port 80, requires sudo
-    app.run(host='0.0.0.0', port=80, debug=False)
+    app.run(host='0.0.0.0', port=80, debug=False, use_reloader=False)#, threaded=True)
 
-t = Thread(target=start_web_server())
+t = Thread(target=start_web_server)
 t.daemon = True
 t.start()
 

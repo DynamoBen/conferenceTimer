@@ -11,7 +11,7 @@ GPIO.setup(12, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(13, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(15, GPIO.IN, GPIO.PUD_UP)
 
-# Input states
+# Indicator states
 indState = [0, 0, 0, 0]
 
 pygame.init()
@@ -126,46 +126,42 @@ def drawclock():
     txtpossec     = digiclocksec.get_rect(centerx=xclockpos,centery=txtsecy)
 
     # Buttons to control indicators
-    if GPIO.input(11):
-        indState[0] = 1
-    else:
-        indState[0] = 0
+    if GPIO.input(11) == 0:
+        indState[0] = indState[0] ^ 1
         
-    if GPIO.input(12):
-        indState[1] = 1
-    else:        
-        indState[1] = 0
+    if GPIO.input(12) == 0:
+        indState[1] = indState[1] ^ 1
+        
+    if GPIO.input(13) == 0:
+        indState[2] = indState[2] ^ 1
 
-    if GPIO.input(13):
-        indState[2] = 1
-    else:
-        indState[2] = 0
-
-    if GPIO.input(15):
-        indState[3] = 1
-    else:
-        indState[3] = 0         
+    if GPIO.input(15) == 0:
+        indState[3] = indState[3] ^ 1
 
     # Function for the indicators
     if indState[0]:
-        pygame.draw.rect(bg, offcolour,(xindboxpos, ind1y, indboxx, indboxy))
-    else:
         pygame.draw.rect(bg, ind1colour,(xindboxpos, ind1y, indboxx, indboxy))
+    else:
+        pygame.draw.rect(bg, offcolour,(xindboxpos, ind1y, indboxx, indboxy))
+        
 
     if indState[1]:
-        pygame.draw.rect(bg, offcolour,(xindboxpos, ind2y, indboxx, indboxy))
-    else:
         pygame.draw.rect(bg, ind2colour,(xindboxpos, ind2y, indboxx, indboxy))
+    else:
+        pygame.draw.rect(bg, offcolour,(xindboxpos, ind2y, indboxx, indboxy))
+        
 
     if indState[2]:
-        pygame.draw.rect(bg, offcolour,(xindboxpos, ind3y, indboxx, indboxy))
-    else:
         pygame.draw.rect(bg, ind3colour,(xindboxpos, ind3y, indboxx, indboxy))
+    else:
+        pygame.draw.rect(bg, offcolour,(xindboxpos, ind3y, indboxx, indboxy))
+        
 
     if indState[3]:
-        pygame.draw.rect(bg, offcolour,(xindboxpos, ind4y, indboxx, indboxy))
-    else:
         pygame.draw.rect(bg, ind4colour,(xindboxpos, ind4y, indboxx, indboxy))
+    else:
+        pygame.draw.rect(bg, offcolour,(xindboxpos, ind4y, indboxx, indboxy))
+        
     
     # Render the text
     bg.blit(digiclockhm, txtposhm)
