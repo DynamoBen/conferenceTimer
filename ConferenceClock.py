@@ -1,6 +1,9 @@
+# http://weblogs.asp.net/yousefjadallah/grid-layout-in-jquery-mobile
+
 from flask import Flask, render_template, request, jsonify
 from threading import Thread
 import pirsclockfull as clock
+import time
 
 app = Flask(__name__)
 
@@ -20,36 +23,25 @@ def _onAir():
         clock.setInd(0, 0)
     return ""
 
-@app.route("/_ind")
-def _ind():
-    state = request.args.get('state')
-    if state=="1":
-        clock.setInd(1, 1)
-        clock.setInd(2, 0)
-        clock.setInd(3, 0)
-    elif state=="2":
-        clock.setInd(1, 0)
-        clock.setInd(2, 1)
-        clock.setInd(3, 0)        
-    elif state=="3":
-        clock.setInd(1, 0)
-        clock.setInd(2, 0)
-        clock.setInd(3, 1)  
-    else:
-        clock.setInd(1, 0)
-        clock.setInd(2, 0)
-        clock.setInd(3, 0)    
-    return ""
-
 # ajax GET call this function periodically to read button state
 # the state is sent back as json data
-@app.route("/_onAirState")
-def _onAirState():
+@app.route("/_status")
+def _status():
     if clock.readInd(0):
-        state = "on"
+        onAirstatus = "on"
     else:
-        state = "off"
-    return jsonify(onAirState=state)
+        onAirstatus = "off"
+
+    if clock.readInd(1):
+        indStatus = clock.txt2
+    elif clock.readInd(2):
+        indStatus = clock.txt3
+    elif clock.readInd(3):
+        indStatus = clock.txt4   
+    else:
+        indStatus = "None"
+        
+    return jsonify(indState=indStatus,onAirState=onAirstatus,time=time.strftime("%H:%M"))    
 
 def GetUptime():
     # get uptime from the linux terminal command
@@ -61,7 +53,7 @@ def GetUptime():
 
 def start_web_server():
     # run the webserver on standard port 80, requires sudo
-    app.run(host='0.0.0.0', port=80, debug=False, use_reloader=False)#, threaded=True)
+    app.run(host='0.0.0.0', port=80, debug=False, use_reloader=False, threaded=True)  
 
 t = Thread(target=start_web_server)
 t.daemon = True

@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<meta name="viewport" content="initial-scale=1, maximum-scale=1">
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<link rel="stylesheet" href="{{ url_for('static', filename='jquery.mobile-1.4.5.min.css') }}"/>		
+		<script src="{{ url_for('static', filename='jquery-1.11.3.min.js') }}"></script>		
+		<script src="{{ url_for('static', filename='jquery.mobile-1.4.5.min.js') }}"></script>
 
 		<style>
 		h3, h4 {text-align: center;}
@@ -23,25 +23,10 @@
 
 			// When the radio buttons are pressed (clicked)
 			// do an ajax request to server to send new indicator state			
-				$('#radio-choice-1').click(function() 
-				{
-				$.getJSON('/_ind', {state: $('#radio-choice-1').val()});
-				});
-
-				$('#radio-choice-2').click(function() 
-				{
-				$.getJSON('/_ind', {state: $('#radio-choice-2').val()});
-				});
-
-				$('#radio-choice-3').click(function() 
-				{
-				$.getJSON('/_ind', {state: $('#radio-choice-3').val()});
-				});
-
-				$('#radio-choice-4').click(function() 
-				{
-				$.getJSON('/_ind', {state: $('#radio-choice-4').val()});
-				});
+				//$('#radio-choice-1').click(function() 
+				//{
+				//$.getJSON('/_ind', {state: $('#radio-choice-1').val()});
+				//});
 			});
 
 			$(function button() 
@@ -49,17 +34,19 @@
 			// periodically (500ms) do an ajax request to get the button state
 			// modify the span tag to reflect the state (pressed or not)
 			// the state text comes from the JSON string returned by the server
-				$.getJSON('/_onAirState', function(data) 
+				$.getJSON('/_status', function(data) 
 				{
 				// Update button state; and refresh the jQuery mobile slider widget
 				$('#flip-onAir').val(data.onAirState);
 				$('#flip-onAir').slider('refresh');
+	
+				$('#indState').text(data.indState);
 
-				//$.getJSON('/_indState', function(data) 
+				$('#time').text(data.time);			
 
-				
-				setTimeout(function(){button();},500);
+				setTimeout(function(){button();},500);		
 				});
+				
 			});
 		</script>
 	</head>
@@ -72,37 +59,53 @@
 		<div data-role="page" data-theme="b">
 		  <div data-role="header">
 			<div><h3>Conference Clock Control</h3></div>
-		  </div>
+		</div>
 
-		  <div data-role="content">
+		<div data-role="content">
 			<form>
-			<select name="flip-onAir" id="flip-onAir" data-role="slider" style="float: left;">
-				<option value="off">OFF AIR</option>
-				<option value="on">ON AIR</option>
-			</select>
-			</form>
+				<center>
+				<select name="flip-onAir" id="flip-onAir" data-role="slider" style="float: left;">
+					<option value="off">OFF AIR</option>
+					<option value="on">ON AIR</option>
+					</select>
+				</center>
+
+				<center><p>Time Remaining: <span id="time"></span></p></center>
+				<center><p>Indicator: <span id="indState"></span></p></center>
+			</form>			
 
 			<form>
-			<fieldset data-role="controlgroup">
-				<legend>Speaker Indicators:</legend>
-     				<input type="radio" name="radio-choice" id="radio-choice-1" value="1" />
-     				<label for="radio-choice-1">"10 MINS"</label>
+			<fieldset class="ui-grid-a">
+				<div class="ui-block-a">
+				<center><strong><label for="number-1">Total Time: </label></center></strong></div>
 
-     				<input type="radio" name="radio-choice" id="radio-choice-2" value="2"  />
-     				<label for="radio-choice-2">"5 MINS"</label>
+				<div class="ui-block-b">
+				<center><strong><label for="number-2">Sum-up Time: </label></center></strong></div>
+			</fieldset>
+			<fieldset class="ui-grid-a">
+				<div class="ui-block-a">
+				<input type="number" data-clear-btn="true" name="number-1" id="number-1" value=""></div>
 
-     				<input type="radio" name="radio-choice" id="radio-choice-3" value="3"  />
-     				<label for="radio-choice-3">"DONE"</label>
-
-     				<input type="radio" name="radio-choice" id="radio-choice-4" value="0" checked="checked" />
-     				<label for="radio-choice-4">None</label>
+				<div class="ui-block-b">
+				<input type="number" data-clear-btn="true" name="number-2" id="number-2" value=""></div>
 			</fieldset>
 			</form>
-
-		  </div>
-		 <div data-role="footer">
+		</div>
+		<div>
+			<form>
+			<center>
+			<fieldset data-role="controlgroup" data-type="horizontal">
+				<input type="button" id="start" value="START">
+				<input type="button" id="stop" value="STOP">
+				<input type="button" id="clear" value="CLEAR">
+			</fieldset>
+			</center>
+			</form>
+		</div>
+		
+		<div data-role="footer">
 			<div><h4>Raspberry Pi {{uptime}}</h4></div>
-		  </div>
+			</div>
 		</div>
 	<body>
 </html>

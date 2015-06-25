@@ -4,15 +4,21 @@ import RPi.GPIO as GPIO
 from pygame.locals import *
 os.environ['SDL_VIDEODRIVER']="fbcon"
 
+# Indicator states
+indState = [0, 0, 0, 0]
+
+# Indicator Text
+txt1 = "ON AIR"
+txt2 = "TALK"
+txt3 = "SUM-UP"
+txt4 = "STOP"
+
 # Setting up the GPIO and inputs with pull up
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(11, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(12, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(13, GPIO.IN, GPIO.PUD_UP)
 GPIO.setup(15, GPIO.IN, GPIO.PUD_UP)
-
-# Indicator states
-indState = [0, 0, 0, 0]
 
 pygame.init()
 bg = pygame.display.set_mode()
@@ -55,10 +61,10 @@ clockfont     = pygame.font.Font(None,digiclocksize)
 indfont       = pygame.font.Font(None,indtxtsize)
 
 # Indicator text - edit text in quotes to desired i.e. "MIC" will show MIC on display
-ind1txt       = indfont.render("ON AIR",True,bgcolour)
-ind2txt       = indfont.render("10 MIN",True,bgcolour)
-ind3txt       = indfont.render("5 MIN",True,bgcolour)
-ind4txt       = indfont.render("DONE",True,bgcolour)
+ind1txt       = indfont.render(txt1,True,bgcolour)
+ind2txt       = indfont.render(txt2,True,bgcolour)
+ind3txt       = indfont.render(txt3,True,bgcolour)
+ind4txt       = indfont.render(txt4,True,bgcolour)
 
 # Indicator positions
 txtposind1 = ind1txt.get_rect(centerx=xtxtpos,centery=ycenter*0.4)
