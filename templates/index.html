@@ -23,10 +23,30 @@
 
 			// When the radio buttons are pressed (clicked)
 			// do an ajax request to server to send new indicator state			
-				//$('#radio-choice-1').click(function() 
-				//{
-				//$.getJSON('/_ind', {state: $('#radio-choice-1').val()});
-				//});
+				$('#start').click(function() 
+				{
+				if ($('#number-1').val() == "" )
+				{
+					//If empty
+					$('#number-1').val($('#currentDuration').text())
+				}
+				if ($('#number-2').val() == "" )
+				{
+					//If empty
+					$('#number-2').val($('#currentSumup').text())
+				}				
+				$.getJSON('/_timer', {state: "start",duration: $('#number-1').val(),sumup: $('#number-2').val()});
+				});
+
+				$('#stop').click(function() 
+				{
+				$.getJSON('/_timer', {state: "stop"});
+				});
+
+				$('#clear').click(function() 
+				{
+				$.getJSON('/_timer', {state: "clear"});
+				});
 			});
 
 			$(function button() 
@@ -42,7 +62,10 @@
 	
 				$('#indState').text(data.indState);
 
-				$('#time').text(data.time);			
+				$('#time').text(data.time);
+
+				$('#currentDuration').text(data.duration);	
+				$('#currentSumup').text(data.sumup);			
 
 				setTimeout(function(){button();},500);		
 				});
@@ -77,10 +100,10 @@
 			<form>
 			<fieldset class="ui-grid-a">
 				<div class="ui-block-a">
-				<center><strong><label for="number-1">Total Time: </label></center></strong></div>
+				<center><strong><label for="number-1">Duration (<span id="currentDuration"></span>) : </label></center></strong></div>
 
 				<div class="ui-block-b">
-				<center><strong><label for="number-2">Sum-up Time: </label></center></strong></div>
+				<center><strong><label for="number-2">Sum-up (<span id="currentSumup"></span>) : </label></center></strong></div>
 			</fieldset>
 			<fieldset class="ui-grid-a">
 				<div class="ui-block-a">
