@@ -1,5 +1,4 @@
 # conferenceTimer
-=======
 
 This is a speakers timer and on-air light intended for confernces that are livestreamed. 
 I got the idea from this blog post: http://blog.la1tv.co.uk/2014/05/pi-clock/
