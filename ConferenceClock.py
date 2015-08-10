@@ -108,7 +108,7 @@ def indicators_timer():
                 clock.setInd(3, 1)
                 timerState = False
                  
-            time.sleep(1)
+        time.sleep(1)
 
 def start_web_server():
     # run the webserver on standard port 80, requires sudo
