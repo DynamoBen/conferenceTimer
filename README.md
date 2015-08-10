@@ -1,5 +1,4 @@
 # conferenceTimer
-<<<<<<< HEAD
 =======
 
 This is a speakers timer and on-air light intended for confernces that are livestreamed. 
@@ -12,4 +11,3 @@ This combines two projects:
 Both of the above projects form the foundation of the finished project.
 
 Enjoy!
->>>>>>> origin/master
